@@ -1,2 +1,2 @@
 # Splicer
-Splice predicting program
+Splice site predicting program
