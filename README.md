@@ -16,9 +16,9 @@ In order for Splicer to generate an organism specific PWM it will require alignm
 
 Quick reminder:
 
----------------<<<< EXON 1 >>>>-----------------------------<<<< EXON 2 >>>>-------------------
-															|                             |
-												  donor site                    acceptor site										                               
+----<<<< EXON 1 >>>>-------------------<<<< EXON 2 >>>>----------
+									  |                 |
+							donor site         acceptor site						                               
 
 Example:
 
@@ -55,10 +55,10 @@ $python3 splicer.py -g scaffolds.fasta bed_file.bed output-matrix.txt 5 3 5 3
 
 The commandline arguments d1, d2, a1, and a2 refer to how many bases before and after the donor and acceptor sites you'd like to inspect, for example:
 
----------------<<<< EXON 1 >>>>-----------------------------<<<< EXON 2 >>>>-------------------
-															|                             |
-												  donor site                    acceptor site
-													d1      d2                    a1         a2
+----<<<< EXON 1 >>>>-------------------<<<< EXON 2 >>>>----------
+									  |                 |
+							donor site         acceptor site
+							d1      d2         a1         a2
 
 by assigned d1 = 5, d2 = 3, a1 = 5, and a2 = 12 you are saying that you'd like Splicer to inspect 5 bases before the donor site (d1) and 3 bases after the donor site (d2). The same logic applies to the acceptor site. d1, d2, a1, a2 must all have values greater than zero. Please remember the values as the same values will need to be specified when scanning your query sequences.
 
@@ -68,12 +68,12 @@ $python $python3 splicer.py <flag> <file_containing_scaffolds> <bed_file> <outpu
 
 Two files will be generated: An alignment file and the PWM text file. The alignment file is there in case you'd like to inspect the splice site sequences pulled from the scaffolds. Like a bedfile, it is tab-delimited:
 
-AGGGAAAA	TAATTTTT
+AGGGAAAA	TAATTTTT\n
 AGAAGAAA	TTTCTTTT
 
 The first column contains the known donor splice sites and the second column contains the known acceptor sites pulled from the scaffold file. Since we specified that we'd like to inspect 5 bases before and 3 bases after the splice sites, the donor and acceptors sites each have a total length of 8. Notice that all sequences in column 1 are equal in length to each other. The same applies for column 2. However, sequences between the two columns do not need to equal in length. If we had specified d1=5, d2=3, a1=2, a2=2 then we'd have:
 
-AGGGAAAA	TTTT
+AGGGAAAA	TTTT\n
 AGAAGAAA	CTTT
 
 The other file generated is the PWM, this is a text file containing the values used to calculate scores for your query sequences. Please do not modify this file in any way.
