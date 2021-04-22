@@ -17,8 +17,8 @@ In order for Splicer to generate an organism specific PWM it will require alignm
 Quick reminder:
 
 ----<<<< EXON 1 >>>>-------------------<<<< EXON 2 >>>>----------
-									  |                 |
-							donor site         acceptor site						                               
+					          |                 |
+							donor site         acceptor site
 
 Example:
 
