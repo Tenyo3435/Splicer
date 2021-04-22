@@ -17,8 +17,8 @@ In order for Splicer to generate an organism specific PWM it will require alignm
 Quick reminder:
 
 ----<<<< EXON 1 >>>>-------------------<<<< EXON 2 >>>>----------
-					|                 |
-				donor site         acceptor site
+                    |                 |
+                donor site         acceptor site
 
 Example:
 
@@ -56,9 +56,9 @@ $python3 splicer.py -g scaffolds.fasta bed_file.bed output-matrix.txt 5 3 5 3
 The commandline arguments d1, d2, a1, and a2 refer to how many bases before and after the donor and acceptor sites you'd like to inspect, for example:
 
 ----<<<< EXON 1 >>>>-------------------<<<< EXON 2 >>>>----------
-					|                 |
-				donor site         acceptor site
-				d1      d2         a1         a2
+                    |                 |
+                donor site         acceptor site
+                d1      d2         a1         a2
 
 by assigned d1 = 5, d2 = 3, a1 = 5, and a2 = 12 you are saying that you'd like Splicer to inspect 5 bases before the donor site (d1) and 3 bases after the donor site (d2). The same logic applies to the acceptor site. d1, d2, a1, a2 must all have values greater than zero. Please remember the values as the same values will need to be specified when scanning your query sequences.
 
