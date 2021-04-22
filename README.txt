@@ -105,3 +105,10 @@ $python3 splicer.py <flag> <alignments> <output_matrix> <d1> <d2> <a1> <a2>
 Like the -g flag, you can specify the background models for each of the nucleotides. Splicer will assume equal probability (0.25) for each nucleotide if you don't.
 
 $python3 splicer.py <flag> <alignments> <output_matrix> <d1> <d2> <a1> <a2> <freq_a> <feq_c> <freq_g> <freq_t>
+
+Please feel free to make any suggestions or changes as this is a work in progress.
+
+Acknowledgements:
+
+I'd like to thank Patricia Sullivan and Fred Jaya from Combine for their help!
+I'd also like to thank my supervisors Professor Kathy Belov, Dr Carolyn Hogg, and Dr Emma Peel (Australasian Wildlife Genomics Group - AWGG)
