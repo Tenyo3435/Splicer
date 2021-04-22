@@ -1,5 +1,6 @@
 from pysam import FastaFile
 from intron_object import intron
+import sys
 
 class file_op:
     #Read file and create dictionary with scaffold IDs and corresponding sequences
@@ -15,16 +16,19 @@ class file_op:
     def sequence_dict_init(self, file):
         dict = {}
         key = None
-        with open(file) as seq_file:
-            for line in seq_file:
-                if (line[0] == ">"):
-                    line = line.split("\n")
-                    line = line[0].split(">")
-                    key = line[1]
-                    dict[key] = ""
-                else:
-                    line = line.split("\n")
-                    dict[key] += line[0]
+        try:
+            with open(file) as seq_file:
+                for line in seq_file:
+                    if (line[0] == ">"):
+                        line = line.split("\n")
+                        line = line[0].split(">")
+                        key = line[1]
+                        dict[key] = ""
+                    else:
+                        line = line.split("\n")
+                        dict[key] += line[0]
+        except: 
+            print("\nERROR: file does not exist or is not fasta format\n")
         return dict
     
     def alignments_init(self, file):
@@ -40,14 +44,18 @@ class file_op:
                 for a in acceptors:
                     alignments.append(a)
         except:
-            print("\nERROR: Alignment file is either emtpy or not correctly formatted\n")
+            print("\nERROR: Alignment file does not exist or is not correctly formatted\n")
         return alignments
                 
 
     #initialise and return list of intron objects 
     def introns_list_init(self, bed_file):
         introns = []
-        bed_file = open(bed_file, "r")
+        try:
+            bed_file = open(bed_file, "r")
+        except:
+            print("\nERROR: bed file does not exist\n")
+            sys.exit(0)
         i = 0
         start = 0
         end = 0
@@ -63,9 +71,9 @@ class file_op:
                 #Can cut this out, wait to see what everyone votes
                 elif (bed_line[5] == "-"):
                     if(i % 2 == 0):
-                        start = int(bed_line[1])
-                    else:
                         end = int(bed_line[2])
+                    else:
+                        start = int(bed_line[1])
                 if(i % 2 != 0):
                     new_intron = intron(bed_line[0], start, end, bed_line[5])
                     introns.append(new_intron)

@@ -14,26 +14,32 @@ class seq_operator:
         alignments = []
         for intron in introns:
             scaffold = scaffold_dict[intron.scaffold_id]
+            scaffold_len = len(scaffold)
             splice_sites = ""
             #Find splice sites for positive strands
-            if(intron.strand == "+"):
-                splice_sites = scaffold[intron.donor - self.d1 + 1: intron.donor + self.d2 + 1] \
-                    + "\t" + scaffold[intron.acceptor - self.a1 + 1 : intron.acceptor + self.a2 + 1]
+            if (intron.strand == "+"):
+                if (((intron.donor - self.d1 + 1) < 0) or ((intron.acceptor + self.a2 + 1) > scaffold_len)):
+                    print("\nERROR: please specify smaller donor/acceptor values\n")
+                    sys.exit(0)
+                splice_sites = scaffold[intron.donor - self.d1 : intron.donor + self.d2] \
+                    + "\t" + scaffold[intron.acceptor - self.a1 : intron.acceptor + self.a2]
             #Find splice sites for negative strands
             else:
+                if ((intron.donor - self.d2 < 0) or (intron.donor - self.a2 < 0) or (intron.acceptor + self.a1  > scaffold_len) or (intron.acceptor + self.d1 > scaffold_len)):
+                    print("\nERROR: please specify smaller donor/acceptor values\n")
+                    sys.exit(0)
                 #reverse strings
-                splice_sites = scaffold[intron.donor - self.d2 + 1 : intron.donor + self.d1 + 1] \
-                    + "\t" + scaffold[intron.acceptor - self.a2 + 1 : intron.acceptor + self.a1 + 1] 
+                start = scaffold[intron.donor - self.d2 : intron.donor + self.d1] 
+                end = scaffold[intron.acceptor - self.a2 : intron.acceptor + self.a1] 
                 #reverse transcribe
-                splice_sites = self.reverse_transcribe(splice_sites)
+                splice_sites = self.reverse_transcribe(start, end)
             alignments.append(splice_sites)
         return alignments
 
-    def reverse_transcribe(self, sequence):
+    def reverse_transcribe(self, start, end):
         nucleotides = {"a" : "T", "c" : "G", "g" : "C", "t" : "A"}
         transcribed_sequence = ""
-        sequence = sequence.split("\t")
-        new_sequence = sequence[0][::-1] + "\t" + sequence[1][::-1]
+        new_sequence = start[::-1] + "\t" + end[::-1]
         for nucl in new_sequence:
             if(nucl == "\t"):
                 transcribed_sequence += "\t"

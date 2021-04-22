@@ -27,6 +27,10 @@ if (flag == "-g"):
     acceptor_1 = int(sys.argv[7])
     acceptor_2 = int(sys.argv[8])
 
+    if(donor_1 < 0 or donor_2 < 0 or acceptor_1 < 0 or acceptor_2 < 0):
+        print("\nERROR: d1, d2, a1, a2 must be >0")
+        sys.exit(0)
+
     #Initialise file operator object to work with fasta and bed files
     file_operator = file_op()
 
@@ -87,6 +91,10 @@ elif (flag == "-a"):
     acceptor_1 = int(sys.argv[6])
     acceptor_2 = int(sys.argv[7])
 
+    if(donor_1 < 0 or donor_2 < 0 or acceptor_1 < 0 or acceptor_2 < 0):
+        print("\nERROR: d1, d2, a1, a2 must be >0")
+        sys.exit(0)
+
     #Initialise file operator object to work with fasta and bed files
     file_operator = file_op()
 
@@ -132,6 +140,10 @@ elif (flag == "-s"):
     donor_2 = int(sys.argv[6])
     acceptor_1 = int(sys.argv[7])
     acceptor_2 = int(sys.argv[8])
+
+    if(donor_1 < 0 or donor_2 < 0 or acceptor_1 < 0 or acceptor_2 < 0):
+        print("\nERROR: d1, d2, a1, a2 must be >0")
+        sys.exit(0)
     
     #Instantiate file operator
     file_operator = file_op()
