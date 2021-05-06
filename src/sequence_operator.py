@@ -28,9 +28,8 @@ class seq_operator:
                 if ((intron.donor - self.d2 < 0) or (intron.donor - self.a2 < 0) or (intron.acceptor + self.a1  > scaffold_len) or (intron.acceptor + self.d1 > scaffold_len)):
                     print("\nERROR: please specify smaller donor/acceptor values\n")
                     sys.exit(0)
-                #reverse strings
-                start = scaffold[intron.donor - self.d2 : intron.donor + self.d1] 
-                end = scaffold[intron.acceptor - self.a2 : intron.acceptor + self.a1] 
+                start = scaffold[intron.donor - self.d2 - 1 : intron.donor + self.d1 - 1]
+                end = scaffold[intron.acceptor - self.a2 - 1: intron.acceptor + self.a1 - 1]
                 #reverse transcribe
                 splice_sites = self.reverse_transcribe(start, end)
             alignments.append(splice_sites)
@@ -97,9 +96,10 @@ class seq_operator:
                 j += 1
                 k += 1
             i += 1
+        print(pfm)
         return pfm
 
-    def generate_pwm(self, pfm, a_freq, c_freq, g_freq, t_freq):
+    def generate_pwm(self, size, pfm, a_freq, c_freq, g_freq, t_freq):
         #background model and corresponding probabilities: A, C, G, T
         b_k = [a_freq, c_freq, g_freq, t_freq]
         i = 0
@@ -108,9 +108,8 @@ class seq_operator:
         while i < len(pfm):
             j = 0
             while j < len(pfm[i]):
-                if (pfm[i][j] != 0):
-                    m = math.log(pfm[i][j]/b_k[b], 2)
-                    pfm[i][j] = m
+                m = math.log((pfm[i][j] + (1/size) * (1/size)) / b_k[b], 2)
+                pfm[i][j] = m
                 j += 1
             b += 1
             i += 1
@@ -127,8 +126,8 @@ class seq_operator:
         #Calculate donor sequence with highest score
         for keys in sequence_dict:
             i = self.d1
-            previous_score = 0
             current_score = 0
+            previous_score = 0
             donor_index = 0
             current_sequence = sequence_dict[keys]
             length = len(current_sequence)
@@ -150,15 +149,14 @@ class seq_operator:
                         print("\n ERROR: sequence has unknown nucleotide - sequence must only contains A, C, G or T\n")
                         sys.exit(0)
                     j += 1
-                if (current_score >= previous_score):
-                    rel_score = ((current_score - min_score)/(max_score - min_score)) * 100
+                rel_score = ((current_score - min_score)/(max_score - min_score)) * 100
+                if (rel_score >= 75):
                     donor_site = splice_site(keys, sequence_dict[keys], donor_index, current_score, rel_score)
                     donor_sites.append(donor_site)
-                    previous_score = current_score
                 i += 1
         #donor_sites.reverse()
-        return donor_sites 
-    
+        return donor_sites
+
     #CHECK
     def scan_acceptor_sites(self, sequence_dict, pwm, max_score, min_score):
         #max score possible
@@ -170,8 +168,8 @@ class seq_operator:
         for keys in sequence_dict:
             i = self.a1
             donor_length = self.d1 + self.d2
-            previous_score = 0
             current_score = 0
+            previous_score = 0
             acceptor_index = 0
             current_sequence = sequence_dict[keys]
             length = len(current_sequence)
@@ -193,15 +191,14 @@ class seq_operator:
                         print("\n ERROR: sequence has unknown nucleotide - sequence must only contains A, C, G or T\n")
                         sys.exit(0)
                     j += 1
-                if (current_score >= previous_score):
-                    rel_score = ((current_score - min_score)/(max_score - min_score)) * 100
+                rel_score = ((current_score - min_score)/(max_score - min_score)) * 100
+                if (current_score >= 75):
                     acceptor_site = splice_site(keys, sequence_dict[keys], acceptor_index, current_score, rel_score)
                     acceptor_sites.append(acceptor_site)
-                    previous_score = current_score
                 i += 1
-        return acceptor_sites 
+        return acceptor_sites
 
-    
+
     def matrix_donor_max(self, pwm):
         i = 0
         max_score = 0
@@ -217,7 +214,7 @@ class seq_operator:
             max_score += max
             i += 1
         return max_score
-    
+
     def matrix_donor_min(self, pwm):
         i = 0
         min_score = 0
@@ -233,7 +230,7 @@ class seq_operator:
             min_score += min
             i += 1
         return min_score
-    
+
     def matrix_acceptor_max(self, pwm):
         max_score = 0
         i = self.d1 + self.d2
@@ -265,6 +262,3 @@ class seq_operator:
             min_score += min
             i += 1
         return min_score
-    
-
-    

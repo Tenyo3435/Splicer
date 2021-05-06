@@ -51,6 +51,7 @@ if (flag == "-g"):
 
     #Return list containing donor and acceptor sites from alignments generated
     site_alignments = operator.return_sites(alignments)
+    size = len(site_alignments)
 
     #Calculate PFM
     pfm = operator.generate_pfm(site_alignments, donor_1 + donor_2, acceptor_1 + acceptor_2)
@@ -60,7 +61,7 @@ if (flag == "-g"):
     if (len(sys.argv) == 9):
 
     #Calculate PWM with custom background probabilties
-        pwm = operator.generate_pwm(pfm, 0.25, 0.25, 0.25, 0.25)
+        pwm = operator.generate_pwm(size, pfm, 0.25, 0.25, 0.25, 0.25)
     elif (len(sys.argv) == 13):
         try:
             a_freq = float(sys.argv[9])
@@ -71,7 +72,7 @@ if (flag == "-g"):
             print("\nERROR: background probabilities must be decimals numbers <= 1.0\n")
 
 
-        pwm = operator.generate_pwm(pfm, a_freq, c_freq, g_freq, t_freq)
+        pwm = operator.generate_pwm(size, pfm, a_freq, c_freq, g_freq, t_freq)
     else:
         print("\nERROR: you must specify 4 background probabilities in the following order as decimals A C G T\n")
         sys.exit(0)
@@ -103,7 +104,7 @@ elif (flag == "-a"):
 
     #Generate alignments
     alignments = file_operator.alignments_init(alignment_file)
-
+    size = len(alignments)
     #Calculate PFM
     pfm = operator.generate_pfm(alignments, donor_1 + donor_2, acceptor_1 + acceptor_2)
 
@@ -113,7 +114,7 @@ elif (flag == "-a"):
     #Calculate PWM with default values
     if (len(sys.argv) == 8):
 
-        pwm = operator.generate_pwm(pfm, 0.25, 0.25, 0.25, 0.25)
+        pwm = operator.generate_pwm(size, pfm, 0.25, 0.25, 0.25, 0.25)
     #Calculate PWM with custom background model values
     elif (len(sys.argv) == 12):
         try:
@@ -123,9 +124,9 @@ elif (flag == "-a"):
             t_freq = float(sys.argv[12])
         except:
             print("\nERROR: background probabilities must be decimals numbers <= 1.0\n")
-        
-        pwm = operator.generate_pwm(pfm, a_freq, c_freq, g_freq, t_freq)
-    
+
+        pwm = operator.generate_pwm(size, pfm, a_freq, c_freq, g_freq, t_freq)
+
     file_operator.output_matrix(pwm, output)
 
 #############################################################
@@ -144,7 +145,7 @@ elif (flag == "-s"):
     if(donor_1 < 0 or donor_2 < 0 or acceptor_1 < 0 or acceptor_2 < 0):
         print("\nERROR: d1, d2, a1, a2 must be >0")
         sys.exit(0)
-    
+
     #Instantiate file operator
     file_operator = file_op()
 

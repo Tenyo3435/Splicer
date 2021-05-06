@@ -12,7 +12,7 @@ class file_op:
             if (not(i.scaffold_id in dict)):
                 dict[i.scaffold_id] = sequences_object.fetch(i.scaffold_id)
         return dict
-    
+
     def sequence_dict_init(self, file):
         dict = {}
         key = None
@@ -27,10 +27,10 @@ class file_op:
                     else:
                         line = line.split("\n")
                         dict[key] += line[0]
-        except: 
+        except:
             print("\nERROR: file does not exist or is not fasta format\n")
         return dict
-    
+
     def alignments_init(self, file):
         alignments = []
         acceptors = []
@@ -46,9 +46,9 @@ class file_op:
         except:
             print("\nERROR: Alignment file does not exist or is not correctly formatted\n")
         return alignments
-                
 
-    #initialise and return list of intron objects 
+
+    #initialise and return list of intron objects
     def introns_list_init(self, bed_file):
         introns = []
         try:
@@ -68,7 +68,6 @@ class file_op:
                         start = int(bed_line[2])
                     else:
                         end = int(bed_line[1])
-                #Can cut this out, wait to see what everyone votes
                 elif (bed_line[5] == "-"):
                     if(i % 2 == 0):
                         end = int(bed_line[2])
@@ -87,7 +86,7 @@ class file_op:
         for line in list:
             file.write(line + "\n")
         file.close()
-    
+
     def output_matrix(self, matrix, output):
         output_string = ""
         i = 0
@@ -122,17 +121,17 @@ class file_op:
         except:
             print("\nERROR: Matrix file is not correctly formatted, please seperate donor and acceptor matrices with tabs and values by \s\n")
         return matrix
-    
+
     def output_results(self, donor_results, acceptor_results, output):
         output_file = open(output, "w")
         output_string = "Splicer Results v1.0\n\n                           =================================\n                           ========== DONOR SITES ==========\n                           =================================\n\n"
         for splice_site in donor_results:
             output_string += "\nID:" + splice_site.scaffold_id + " Score:{:.2f}".format(splice_site.score) + " Relative Score (%):{:.2f}".format(splice_site.relative_score) + " Index:" +\
-                str(splice_site.index) + "\n" + "SEQUENCE: \n" + splice_site.sequence[0 : splice_site.index] + ">\n"
+                str(splice_site.index) + "\n" + "SEQUENCE: \n" + splice_site.sequence[0 : splice_site.index] + " > " +\
+                    splice_site.sequence[splice_site.index:] + "\n"
         output_string += "\n\n\n\n                           =================================\n                           ======== ACCEPTOR SITES =========\n                           =================================\n\n"
 
         for splice_site in acceptor_results:
             output_string += "\nID:" + splice_site.scaffold_id + " Score:{:.2f}".format(splice_site.score) + " Relative Score (%):{:.2f}".format(splice_site.relative_score) + " Index:" +\
-                str(splice_site.index) + "\n" + "SEQUENCE: \n" + "<" + splice_site.sequence[splice_site.index:] + "\n"
+                str(splice_site.index) + "\n" + "SEQUENCE: \n" + splice_site.sequence[: splice_site.index] + " < " + splice_site.sequence[splice_site.index:] + "\n"
         output_file.write(output_string)
-
