@@ -1,4 +1,5 @@
 SPLICER: Generalised Splice-site prediction program.
+V 1.1
 
 Dependency: pysam (Splicer requires pysam as a dependency, please install pysam)
 
@@ -92,9 +93,9 @@ OUTPUT:
 
 You will now have the results as a text file.
 
-Donor sites: For each sequence, Splicer will output the query sequence from the start of the sequence up until it reaches a putative donor splice site. You will be able to see this as the sequence will end with ">". Each query sequence will also have the relative score (%), this just tells the you how close to the donor site score got to the maximum score possible. Thus, the higher the percentage the closer it resembles the known donor splice sites from your organism.
+Donor sites: For each sequence, Splicer will output the query sequence with the putative donor splice site marked with a ">" symbol. Note that the true donor splice site may be anywhere within that region.
 
-Acceptor sites: For each sequence, Splicer will output the query sequence from first putative acceptor splice site until the end of the query sequence. Thus, putative acceptor sites will start with "<"
+Acceptor sites: For each sequence, Splicer will output the query sequence with the putative acceptor splice site marked with a "<" symbol. Note that the true acceptor splice site may be anywhere within that region.
 
 OTHER FLAGS:
 
